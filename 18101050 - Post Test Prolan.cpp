@@ -43,7 +43,7 @@ class Movie // nama kelas induk program
         void kategori()
         {
             if (age<=2){
-                cout<<"\t Dibawah batita sebaiknya jangan diajak untuk menonton film "<<endl;
+                cout<<"\tDibawah batita sebaiknya jangan diajak untuk menonton film "<<endl;
             } else if (age>2 && age<=6) {
                 cout<<"\tKategori film yang boleh ditonton              : (P) Anak Usia Prasekolah"<<endl;
             } else if (age>6 && age<=12) {
@@ -60,10 +60,10 @@ class Movie // nama kelas induk program
             }
         }
         // member fungsi untuk pemilihan kategori usia Anda
-        void kpop()
+        void Hobby()
         {
             if (ans=="iya"){
-                cout<<"\tBerikut 10 Rekomendasi Drama Korea terbaik versi mimin "<<endl;
+                cout<<"\n\tBerikut 10 Rekomendasi Drama Korea yang wajib ditonton versi mimin "<<endl;
                 cout<<"\n\t\t 1. Descendant of The Sun "<<endl;
                 cout<<"\t\t 2. Vagabond "<<endl;
                 cout<<"\t\t 3. When The Camellia Blooms "<<endl;
@@ -75,7 +75,18 @@ class Movie // nama kelas induk program
                 cout<<"\t\t 9. Romantic Doctor, Teacher Kim 2 "<<endl;
                 cout<<"\t\t 10. It's Okay To Be Not Okay "<<endl;
             }else if(ans=="tidak"){
-                cout<<"\tMimin tidak punya film rekomendasi untuk kamu "<<endl;
+                cout<<"\n\tBerikut 5 Rekomendasi Film Lokal versi mimin "<<endl;
+                cout<<"\n\t\t 1. Habibie & Ainun "<<endl;
+                cout<<"\t\t 2. Rudy Habibie "<<endl;
+                cout<<"\t\t 3. Habibie & Ainun 3  "<<endl;
+                cout<<"\t\t 4. Nanti Kita Cerita Tentang Hari Ini "<<endl;
+                cout<<"\t\t 5. Imperfect "<<endl;
+                cout<<"\n\tBerikut 5 Rekomendasi Film Barat terbaik versi mimin "<<endl;
+                cout<<"\n\t\t 1. Dolittle "<<endl;
+                cout<<"\t\t 2. Mulan "<<endl;
+                cout<<"\t\t 3. Onward "<<endl;
+                cout<<"\t\t 4. Avengers "<<endl;
+                cout<<"\t\t 5. Fast & Furious "<<endl;
             } else {
                 cout<<" \tOpsinya hanya iya/tidak, coba lagi"<<endl;
             }
@@ -116,8 +127,8 @@ int main()
                 cout<<endl;
                 // memanggil fungsi void untuk menunjukan kotegori film
                 M.kategori();
-                // memanggil fungsi void untuk survei apakah Anda penggemar drama korea
-                M.kpop();
+                // memanggil fungsi void rekomendasi film
+                M.Hobby();
                 // menulis data baru untuk disimpan pada file disk
                 data.write((char*)(&M), sizeof(M));
                 cout<<endl;
@@ -134,37 +145,33 @@ int main()
             // melihat rekap data
             case READ:
                 system("cls");
-                // membuka file disk
+                // membuka disk file
                 data.open("Rekap Data.txt", ios::app | ios::out | ios::in | ios::binary );
-
-                data.seekg(0,ios::beg);
+				// mencari ukuran data yang digunakan untuk mengetahui jumlah input data
+                data.read((char*)(&M),sizeof(M));
+				data.seekg(0,ios::beg);
                 start = data.tellg();
                 data.seekg(0,ios::end);
                 end = data.tellg();
-                ukuran = 1+((end-start)/sizeof(data));
-                // meletakan posisi pointer pada data pertama
-                //data.seekg(0,ios::beg);
-
+                ukuran = (end-start)/120;
                 cout<<"\n\n\t\t\t\t*** Rekap Data ***"<<endl;
                 cout<<endl;
-
-
                 cout<<"\n\tJumlah Pencoba : "<<ukuran<<endl;
+                // menutup disk file
                 data.close();
-
+				// membuka disk file
                 data.open("Rekap Data.txt", ios::app | ios::out | ios::in | ios::binary );
-                // membaca data dalam disk file
+                // meletakan pointer pada data 1 dan membacanya
+				data.seekg(0);
                 data.read((char*)(&M), sizeof(M));
-
-                // perulangan untuk menampilkan data pertama sampai terakhir
-                while(!data.eof()){
-
-                // menampilkan warga yang sudah terdaftar
-                M.showData();
-                // membaca data pertama sampai terakhir
-                data.read((char*)(&M), sizeof(M));
+				// perulangan untuk menampilkan data pertama sampai terakhir
+					while(!data.eof()){
+                	// menampilkan warga yang sudah terdaftar
+                	M.showData();
+                	// membaca data dalam disk file
+                	data.read((char*)(&M), sizeof(M));
                 }
-                // menutup disk file untuk input data
+                // menutup disk file
                 data.close();
                 cout<<"\n\t\t";system ("pause");
                 system("cls");
@@ -174,7 +181,7 @@ int main()
             // mengubah data yang sudah diinput
             case UPDATE:
                 system("cls");
-
+				// membuka disk file
                 data.open("Rekap Data.txt", ios::in | ios::binary | ios::out );
                 cout<<"\n\t\tJumlah Pencoba : "<<ukuran<<endl;
                 cout<<"\n\t\tPilih urutan data pencoba [nomor] : ";cin>>posisi;
@@ -182,10 +189,9 @@ int main()
                 int letak = (posisi-1)*sizeof(data);
                 data.seekg(letak);
                 //menulis kembali data yang diedit
-                //system("cls");
                 M.getData();
                 M.kategori();
-                M.kpop();
+                M.Hobby();
                 data.write((char*)(&M),sizeof(M));
                 data.close();
                 cout<<"\n\t\t";system ("pause");
@@ -203,3 +209,4 @@ int main()
     cout<<"\n\n\t\t Matursuwun . . . . . . "<<endl;
 	return 0;
 }
+
